@@ -17,19 +17,14 @@ jobs:
 
       - name: Validate file content
         run: |
-          echo "Checking all text files in the Sasi branch for 'sasi'..."
           errors=0
 
-          # Print the contents of the repository for debugging
-          echo "Repository contents:"
-          ls -R
-          
           for file in $(find . -type f -name "*.txt"); do
-            echo "Checking file: $file"
-            cat "$file"
             if ! grep -q "sasi" "$file"; then
               echo "Error: $file does not contain the word 'sasi'."
               errors=1
+            else
+              echo "Message: $file contains the word 'sasi'."
             fi
           done
 
