@@ -15,16 +15,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Get list of files changed
+        id: changes
+        run: |
+          echo "files=$(git diff --name-only HEAD^ HEAD)" >> $GITHUB_ENV
+
       - name: Validate file content
         run: |
           errors=0
+          files=$(echo $files | tr ' ' '\n')
 
-          for file in $(find . -type f -name "*.txt"); do
-            if ! grep -q "sasi" "$file"; then
-              echo "Error: $file does not contain the word 'sasi'."
-              errors=1
-            else
-              echo "Message: $file contains the word 'sasi'."
+          for file in $files; do
+            if [ -f "$file" ]; then
+              if ! grep -q "sasi" "$file"; then
+                echo "Error: $file does not contain the word 'sasi'."
+                errors=1
+              else
+                echo "Message: $file contains the word 'sasi'."
+              fi
             fi
           done
 
