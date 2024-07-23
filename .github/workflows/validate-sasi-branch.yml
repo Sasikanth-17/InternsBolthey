@@ -1,0 +1,27 @@
+name: Validate Sasi Branch Files
+
+on:
+  push:
+    branches:
+      - Sasi
+  pull_request:
+    branches:
+      - Sasi
+
+jobs:
+  validate-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Validate file content
+        run: |
+          for file in $(git diff --name-only HEAD^ HEAD); do
+            if [[ -f "$file" && $(file --mime-type -b "$file") == "text/plain" ]]; then
+              if ! grep -q "sasi" "$file"; then
+                echo "Error: $file does not contain the word 'sasi'."
+                exit 1
+              fi
+            fi
+          done
