@@ -18,7 +18,8 @@ jobs:
       - name: List changed files
         id: list_files
         run: |
-          echo "CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)" >> $GITHUB_ENV
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
 
       - name: Validate text files
         run: |
