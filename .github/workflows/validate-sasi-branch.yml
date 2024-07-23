@@ -18,7 +18,7 @@ jobs:
       - name: List changed files
         id: list_files
         run: |
-          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $(git log -n 1 --pretty=format:%H))
           echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
 
       - name: Validate text files
