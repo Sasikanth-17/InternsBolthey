@@ -18,13 +18,13 @@ jobs:
       - name: List changed files
         id: list_files
         run: |
-          CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $(git log -n 1 --pretty=format:%H))
-          echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt
+          cat changed_files.txt
 
       - name: Validate text files
         run: |
           errors=0
-          for file in $CHANGED_FILES; do
+          while IFS= read -r file; do
             if [[ $file == *.txt ]]; then
               if ! grep -q "sasi" "$file"; then
                 echo "Error: $file does not contain the word 'sasi'."
@@ -33,7 +33,7 @@ jobs:
                 echo "Message: $file contains the word 'sasi'."
               fi
             fi
-          done
+          done < changed_files.txt
 
           if [ $errors -ne 0 ]; then
             exit 1
