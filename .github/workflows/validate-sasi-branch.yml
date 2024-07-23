@@ -19,12 +19,14 @@ jobs:
         run: |
           echo "Checking all text files in the Sasi branch for 'sasi'..."
           errors=0
-          # Ensure the repository is up to date
-          git fetch --all
-          git reset --hard origin/Sasi
+
+          # Print the contents of the repository for debugging
+          echo "Repository contents:"
+          ls -R
           
-          # List all text files and check their contents
           for file in $(find . -type f -name "*.txt"); do
+            echo "Checking file: $file"
+            cat "$file"
             if ! grep -q "sasi" "$file"; then
               echo "Error: $file does not contain the word 'sasi'."
               errors=1
