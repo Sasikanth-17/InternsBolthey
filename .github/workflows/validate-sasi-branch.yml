@@ -18,7 +18,7 @@ jobs:
       - name: Get list of files changed
         id: changes
         run: |
-          echo "files=$(git diff --name-only HEAD^ HEAD)" >> $GITHUB_ENV
+          echo "files=$(git diff --name-only --diff-filter=ACMRT HEAD^ HEAD)" >> $GITHUB_ENV
 
       - name: Validate file content
         run: |
@@ -26,7 +26,7 @@ jobs:
           files=$(echo $files | tr ' ' '\n')
 
           for file in $files; do
-            if [ -f "$file" ]; then
+            if [[ $file == *.txt ]]; then
               if ! grep -q "sasi" "$file"; then
                 echo "Error: $file does not contain the word 'sasi'."
                 errors=1
