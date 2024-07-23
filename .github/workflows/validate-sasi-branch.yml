@@ -17,11 +17,12 @@ jobs:
 
       - name: Validate file content
         run: |
-          for file in $(git diff --name-only HEAD^ HEAD); do
-            if [[ -f "$file" && $(file --mime-type -b "$file") == "text/plain" ]]; then
-              if ! grep -q "sasi" "$file"; then
-                echo "Error: $file does not contain the word 'sasi'."
-                exit 1
-              fi
+          echo "Checking all files in the Sasi branch for 'sasi'..."
+          for file in $(find . -type f -name "*.txt"); do
+            if grep -q "sasi" "$file"; then
+              echo "$file contains the word 'sasi'."
+            else
+              echo "Error: $file does not contain the word 'sasi'."
+              exit 1
             fi
           done
